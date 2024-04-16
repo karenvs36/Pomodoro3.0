@@ -1,0 +1,69 @@
+@font-face {
+    font-family: VT323;
+    src: url(./VT323-Regular.ttf);
+
+}
+
+* {
+    font-family: VT323;
+    color: #F9E8C9
+}
+
+body { 
+	display: flex; 
+	align-items: center; 
+	justify-content: center; 
+	line-height: 1.5; 
+	min-height: 100vh; 
+	background: #201658; 
+	flex-direction: column; 
+	margin: 0; 
+    font-family: VT323;
+} 
+
+
+.main { 
+	background-color: #201658; 
+	border-radius: 15px; 
+	padding: 10px 20px; 
+	transition: transform 0.2s; 
+	width: 500px; 
+	height: 400px; 
+	text-align: center; 
+} 
+
+.timer-circle { 
+	border-radius: 50%; 
+	width: 200px; 
+	height: 200px; 
+	margin: 20px auto; 
+	display: flex; 
+	align-items: center; 
+	justify-content: center; 
+	font-size: 25px; 
+	color: #F9E8C9; 
+	border: 8px solid #F9E8C9; 
+} 
+
+.control-buttons { 
+	margin-top: 75px; 
+	display: flex; 
+	justify-content: space-evenly; 
+    
+} 
+
+.control-buttons button { 
+	background-color: #F9E8C9; 
+	color: #fff; 
+	border: none; 
+	padding: 10px 20px; 
+	border-radius: 5px; 
+	cursor: pointer; 
+    color: black;
+} 
+
+.control-buttons button:hover { 
+	background-color: #b3a58d; 
+	transition: background-color 0.3s; 
+}
+
