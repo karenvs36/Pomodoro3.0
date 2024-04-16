@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const playButton = document.querySelector(".control-buttons button:nth-of-type(1)");
     const pauseButton = document.querySelector(".control-buttons button:nth-of-type(2)");
     const restartButton = document.querySelector(".control-buttons button:nth-of-type(3)");
+    const catImage = new Image();
+    catImage.src = "cat.gif";
 
     let minutes = 0;
     let seconds = 2; // Adjusted for testing purposes
@@ -13,54 +15,59 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let timerInterval;
 
+
     // Function to update the timer display in the HTML
     function updateTimerDisplay() {
         timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }
 
     // Function to start the timer
-    function startTimer() {
-        timerInterval = setInterval(function () {
-            if (!isPaused) {
-                if (seconds === 0) {
-                    if (minutes === 0) {
-                        clearInterval(timerInterval);
-                        if (isBreak) {
-                            // Time for study after each break
-                            minutes = 0;
-                            seconds = 1;
-                            isBreak = false;
-                            document.getElementById('bellSound').play();
-                            // Show judging cat images again after the break
-                            showJudgingCats();
-                        } else {
-                            if (pomodoroCount === 3) {
-                                // Long break time after 4 pomodoros
-                                minutes = 15;
-                                isBreak = true;
-                                pomodoroCount = 0;
-                            } else {
-                                // Short break time after each pomodoro
-                                minutes = 5;
-                                isBreak = true;
-                                pomodoroCount++;
-                            }
-                        }
-                        // Automatically start the timer if it's not a long break
-                        if (!isBreak) {
-                            startTimer();
-                        }
+ // Function to start the timer
+function startTimer() {
+    timerInterval = setInterval(function () {
+        if (!isPaused) {
+            if (seconds === 0) {
+                if (minutes === 0) {
+                    clearInterval(timerInterval);
+                    if (isBreak) {
+                        // Time for study after each break
+                        minutes = 25; // Change back to 25 minutes for study session
+                        seconds = 0;
+                        isBreak = false;
+                        document.getElementById('bellSound').play();
+                        console.log("Starting study session...");
+                        // Hide cat image if shown during break
+                        hideCatImage();
                     } else {
-                        minutes--;
-                        seconds = 59;
+                        if (pomodoroCount === 3) {
+                            // Long break time after 4 pomodoros
+                            minutes = 15;
+                            isBreak = true;
+                            pomodoroCount = 0;
+                            console.log("Starting long break...");
+                        } else {
+                            // Short break time after each pomodoro
+                            minutes = 5;
+                            isBreak = true;
+                            pomodoroCount++;
+                            console.log("Starting short break...");
+                        }
+                        // Automatically start the timer for the break
+                        startTimer();
                     }
                 } else {
-                    seconds--;
+                    minutes--;
+                    seconds = 59;
                 }
-                updateTimerDisplay();
+            } else {
+                seconds--;
             }
-        }, 1000);
-    }
+            updateTimerDisplay();
+        }
+    }, 1000);
+}
+
+    
 
     // Click event for the play button
     playButton.addEventListener("click", function () {
@@ -75,15 +82,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Function to show judging cat images
     function showJudgingCats() {
-        // Show the images by setting their bottom position to 0
-        document.querySelector('.judging-cat.left').style.bottom = '0';
-        document.querySelector('.judging-cat.right').style.bottom = '0';
+        // Show the images by setting their bottom position to -100px
+        document.querySelector('.judging-cat.left').style.bottom = '300px';
+        document.querySelector('.judging-cat.right').style.bottom = '300px';
 
-        // Hide the images after 3 seconds
+        // Move the gifs higher on the screen after a delay
         setTimeout(function () {
-            hideJudgingCats();
-        }, 3000);
+            document.querySelector('.judging-cat.left').style.bottom = '298px';
+            document.querySelector('.judging-cat.right').style.bottom = '298px';
+        }, 500); // Adjust the delay as needed
     }
+
 
     // Function to hide judging cat images
     function hideJudgingCats() {

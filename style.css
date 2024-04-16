@@ -69,12 +69,11 @@ body {
 
 .judging-cat {
     position: fixed;
-    bottom: 300px; /* Off-screen initially */
+    bottom: -200px; /* Off-screen initially */
     transition: bottom 0.5s ease-in-out; /* Smooth transition */
     z-index: 1000; /* Ensure it's above other content */
     width: 200px; /* Set the width */
     height: 200px; /* Maintain aspect ratio */
-	
 }
 
 .left {
