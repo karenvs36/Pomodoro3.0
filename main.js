@@ -31,6 +31,8 @@ document.addEventListener("DOMContentLoaded", function () {
                             seconds = 1;
                             isBreak = false;
                             document.getElementById('bellSound').play();
+                            // Show judging cat images again after the break
+                            showJudgingCats();
                         } else {
                             if (pomodoroCount === 3) {
                                 // Long break time after 4 pomodoros
@@ -64,26 +66,32 @@ document.addEventListener("DOMContentLoaded", function () {
     playButton.addEventListener("click", function () {
         isPaused = false;
         document.getElementById('clickSound').play(); // Play click sound
-        startTimer();
+        // Start the timer only if it's not already running
+        if (!timerInterval) {
+            showJudgingCats(); // Show judging cat images at the beginning of the session
+            startTimer();
+        }
     });
 
-    // Click event for the pause button
-    pauseButton.addEventListener("click", function () {
-        isPaused = true;
-    });
+    // Function to show judging cat images
+    function showJudgingCats() {
+        // Show the images by setting their bottom position to 0
+        document.querySelector('.judging-cat.left').style.bottom = '0';
+        document.querySelector('.judging-cat.right').style.bottom = '0';
 
-    // Click event for the restart button
-    restartButton.addEventListener("click", function () {
-        clearInterval(timerInterval);
-        minutes = 25;
-        seconds = 0;
-        pomodoroCount = 0;
-        isBreak = false;
-        isPaused = false;
-        updateTimerDisplay();
-    });
+        // Hide the images after 3 seconds
+        setTimeout(function () {
+            hideJudgingCats();
+        }, 3000);
+    }
+
+    // Function to hide judging cat images
+    function hideJudgingCats() {
+        // Hide the images by setting their bottom position to -100px
+        document.querySelector('.judging-cat.left').style.bottom = '-100px';
+        document.querySelector('.judging-cat.right').style.bottom = '-100px';
+    }
 
     // Show the initial timer
     updateTimerDisplay();
 });
-//comment dsklnfkldsnfklsd
