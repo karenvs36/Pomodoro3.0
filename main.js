@@ -4,6 +4,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const playButton = document.querySelector(".control-buttons button:nth-of-type(1)");
     const pauseButton = document.querySelector(".control-buttons button:nth-of-type(2)");
     const restartButton = document.querySelector(".control-buttons button:nth-of-type(3)");
+    const judgingCatImages = document.querySelectorAll('.judging-cat');
+    const breakCatImage = new Image();
+    breakCatImage.src = "cat.gif";
+    const breakSound = document.getElementById("breakSound");
 
     let minutes = 0;
     let seconds = 2; // Adjusted for testing purposes
@@ -27,27 +31,32 @@ document.addEventListener("DOMContentLoaded", function () {
                         clearInterval(timerInterval);
                         if (isBreak) {
                             // Time for study after each break
-                            minutes = 0;
-                            seconds = 1;
+                            minutes = 25; // Change back to 25 minutes for study session
+                            seconds = 0;
                             isBreak = false;
-                            document.getElementById('bellSound').play();
+                            console.log("Starting study session...");
+                            hideCatImage(); // Hide the break cat image
                         } else {
+                            document.getElementById('bellSound').play(); // Play bell sound for the end of the study session
                             if (pomodoroCount === 3) {
                                 // Long break time after 4 pomodoros
                                 minutes = 15;
                                 isBreak = true;
                                 pomodoroCount = 0;
+                                console.log("Starting long break...");
                             } else {
                                 // Short break time after each pomodoro
                                 minutes = 5;
                                 isBreak = true;
                                 pomodoroCount++;
+                                console.log("Starting short break...");
+                                showCatImage(); // Show the break cat image
+                                breakSound.play(); // Play nyan sound
                             }
                         }
-                        // Automatically start the timer if it's not a long break
-                        if (!isBreak) {
-                            startTimer();
-                        }
+                        updateTimerDisplay();
+                        // Automatically start the timer for the break or work session
+                        startTimer();
                     } else {
                         minutes--;
                         seconds = 59;
@@ -64,26 +73,40 @@ document.addEventListener("DOMContentLoaded", function () {
     playButton.addEventListener("click", function () {
         isPaused = false;
         document.getElementById('clickSound').play(); // Play click sound
-        startTimer();
+        // Start the timer only if it's not already running
+        if (!timerInterval) {
+            if (!isBreak) {
+                showJudgingCats(); // Show judging cat images at the beginning of the session
+            } else {
+                showCatImage(); // Show break cat image
+            }
+            startTimer();
+        }
     });
 
-    // Click event for the pause button
-    pauseButton.addEventListener("click", function () {
-        isPaused = true;
-    });
+    // Function to show judging cat images
+    function showJudgingCats() {
+        judgingCatImages.forEach(cat => {
+            cat.style.bottom = '300px';
+        });
+        // Move the gifs higher on the screen after a delay
+        setTimeout(function () {
+            judgingCatImages.forEach(cat => {
+                cat.style.bottom = '298px';
+            });
+        }, 500); // Adjust the delay as needed
+    }
 
-    // Click event for the restart button
-    restartButton.addEventListener("click", function () {
-        clearInterval(timerInterval);
-        minutes = 25;
-        seconds = 0;
-        pomodoroCount = 0;
-        isBreak = false;
-        isPaused = false;
-        updateTimerDisplay();
-    });
+    // Function to show break cat image
+    function showCatImage() {
+        breakCatImage.style.bottom = '298px';
+    }
+
+    // Function to hide break cat image
+    function hideCatImage() {
+        breakCatImage.style.bottom = '-100px';
+    }
 
     // Show the initial timer
     updateTimerDisplay();
 });
-//comment
