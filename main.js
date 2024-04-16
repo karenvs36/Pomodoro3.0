@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Function to start the timer
  // Function to start the timer
+// Function to start the timer
 function startTimer() {
     timerInterval = setInterval(function () {
         if (!isPaused) {
@@ -34,11 +35,11 @@ function startTimer() {
                         minutes = 25; // Change back to 25 minutes for study session
                         seconds = 0;
                         isBreak = false;
-                        document.getElementById('bellSound').play();
                         console.log("Starting study session...");
                         // Hide cat image if shown during break
                         hideCatImage();
                     } else {
+                        document.getElementById('bellSound').play(); // Play bell sound for the end of the study session
                         if (pomodoroCount === 3) {
                             // Long break time after 4 pomodoros
                             minutes = 15;
@@ -66,6 +67,7 @@ function startTimer() {
         }
     }, 1000);
 }
+
 
     
 
