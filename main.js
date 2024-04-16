@@ -2,11 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Get HTML elements
     const timerDisplay = document.getElementById("timer");
     const playButton = document.querySelector(".control-buttons button:nth-of-type(1)");
-    const pauseButton = document.querySelector(".control-buttons button:nth-of-type(2)");
-    const restartButton = document.querySelector(".control-buttons button:nth-of-type(3)");
     const judgingCatImages = document.querySelectorAll('.judging-cat');
-    const breakCatImage = new Image();
-    breakCatImage.src = "cat.gif";
     const breakSound = document.getElementById("breakSound");
 
     let minutes = 0;
@@ -72,7 +68,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Click event for the play button
     playButton.addEventListener("click", function () {
         isPaused = false;
-        document.getElementById('clickSound').play(); // Play click sound
         // Start the timer only if it's not already running
         if (!timerInterval) {
             if (!isBreak) {
@@ -99,12 +94,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Function to show break cat image
     function showCatImage() {
-        breakCatImage.style.bottom = '298px';
+        const breakCatImage = new Image();
+        breakCatImage.src = "cat.gif";
+        breakCatImage.classList.add("break-cat");
+        document.body.appendChild(breakCatImage); // Append break cat image to the body
     }
 
     // Function to hide break cat image
     function hideCatImage() {
-        breakCatImage.style.bottom = '-100px';
+        const breakCatImage = document.querySelector(".break-cat");
+        if (breakCatImage) {
+            breakCatImage.remove(); // Remove break cat image from the body
+        }
     }
 
     // Show the initial timer

@@ -67,7 +67,7 @@ body {
 	transition: background-color 0.3s; 
 }
 
-.judging-cat {
+.judging-cat, .cat {
     position: fixed;
     bottom: 300px; /* Off-screen initially */
     transition: bottom 0.5s ease-in-out; /* Smooth transition */
@@ -85,4 +85,3 @@ body {
     right: 15rem;
 }
 
-/*comment*/
