@@ -45,10 +45,16 @@ body {
 	border: 8px solid #F9E8C9; 
 } 
 
+.realbutton {
+	width: 60px;
+	font-size: 16px;
+}
 .control-buttons { 
 	margin-top: 75px; 
 	display: flex; 
 	justify-content: space-evenly; 
+	margin-left: 30px;
+	margin-right: 30px;
     
 } 
 
@@ -56,10 +62,11 @@ body {
 	background-color: #F9E8C9; 
 	color: #fff; 
 	border: none; 
-	padding: 10px 20px; 
+	padding: 15px 10px; 
 	border-radius: 5px; 
 	cursor: pointer; 
     color: black;
+	justify-content: center;
 } 
 
 .control-buttons button:hover { 
@@ -78,10 +85,42 @@ body {
 }
 
 .left {
-    left: 15rem;
+    left: 20rem;
 }
 
 .right {
-    right: 15rem;
+    right: 20rem;
 }
 
+.cat {
+    display: none; /* Initially hide the cat */
+}
+
+.break-time .cat {
+    display: block; /* Show the cat during breaks */
+}
+
+.restart-button {
+    background-color: #F9E8C9;
+    color: black;
+    border: none;
+    padding: 10px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none; /* Ensure anchor tag doesn't have underline */
+	margin-top: 1px;
+	margin-left: 1px;
+}
+.restart-button:hover {
+    background-color: #b3a58d;
+    transition: background-color 0.3s;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    background-color: #201658;
+    color: #F9E8C9;
+    padding: 5px 30px;
+}

@@ -1,113 +1,136 @@
-document.addEventListener("DOMContentLoaded", function () {
-    // Get HTML elements
-    const timerDisplay = document.getElementById("timer");
-    const playButton = document.querySelector(".control-buttons button:nth-of-type(1)");
-    const judgingCatImages = document.querySelectorAll('.judging-cat');
-    const breakSound = document.getElementById("breakSound");
+// Get HTML elements
+const timerDisplay = document.getElementById("timer");
+const playButton = document.querySelector(".control-buttons button:nth-of-type(1)");
+const pauseButton = document.querySelector(".control-buttons button:nth-of-type(2)");
+const restartButton = document.querySelector(".control-buttons button:nth-of-type(3)"); // New line
+const breakSound = document.getElementById("breakSound");
+const judgingCatImages = document.querySelectorAll('.judging-cat');
+const catImages = document.querySelectorAll('.cat');
 
-    let minutes = 0;
-    let seconds = 2; // Adjusted for testing purposes
-    let isPaused = false;
-    let isBreak = false;
-    let pomodoroCount = 0;
+let minutes = 0;
+let seconds = 2; // Adjusted for testing purposes
+let isPaused = false;
+let isBreak = false;
+let pomodoroCount = 0;
 
-    let timerInterval;
+let timerInterval;
 
-    // Function to update the timer display in the HTML
-    function updateTimerDisplay() {
-        timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    }
+// Function to update the timer display in the HTML
+function updateTimerDisplay() {
+    timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
 
-    // Function to start the timer
-    function startTimer() {
-        timerInterval = setInterval(function () {
-            if (!isPaused) {
-                if (seconds === 0) {
-                    if (minutes === 0) {
-                        clearInterval(timerInterval);
-                        if (isBreak) {
-                            // Time for study after each break
-                            minutes = 25; // Change back to 25 minutes for study session
-                            seconds = 0;
-                            isBreak = false;
-                            console.log("Starting study session...");
-                            hideCatImage(); // Hide the break cat image
-                        } else {
-                            document.getElementById('bellSound').play(); // Play bell sound for the end of the study session
-                            if (pomodoroCount === 3) {
-                                // Long break time after 4 pomodoros
-                                minutes = 15;
-                                isBreak = true;
-                                pomodoroCount = 0;
-                                console.log("Starting long break...");
-                            } else {
-                                // Short break time after each pomodoro
-                                minutes = 5;
-                                isBreak = true;
-                                pomodoroCount++;
-                                console.log("Starting short break...");
-                                showCatImage(); // Show the break cat image
-                                breakSound.play(); // Play nyan sound
-                            }
-                        }
-                        updateTimerDisplay();
-                        // Automatically start the timer for the break or work session
-                        startTimer();
+// Function to start the timer
+function startTimer() {
+    timerInterval = setInterval(function () {
+        if (!isPaused) {
+            if (seconds === 0) {
+                if (minutes === 0) {
+                    clearInterval(timerInterval);
+                    if (isBreak) {
+                        // Time for study after each break
+                        minutes = 0; // Change back to 25 minutes for study session
+                        seconds = 02;
+                        isBreak = false;
+                        console.log("Starting study session...");
+                        document.body.classList.remove('break-time'); // Remove break-time class
+                        showJudgingCatImages(); // Show the judging cat images
+
+                        breakSound.pause(); // Pause the break sound
                     } else {
-                        minutes--;
-                        seconds = 59;
+                        document.getElementById('bellSound').play(); // Play bell sound for the end of the study session
+                        if (pomodoroCount === 3) {
+                            // Long break time after 4 pomodoros
+                            minutes = 1;
+                            seconds = 0;
+                            isBreak = true;
+                            pomodoroCount = 0;
+                            console.log("Starting long break...");
+                            breakSound.play();
+                            showCatImages(); // Show the cat images
+                            document.body.classList.add('break-time'); // Add break-time class
+                            hideJudgingCatImages(); 
+                            
+
+
+                            breakSound.pause();
+                        } else {
+                            // Short break time after each pomodoro
+                            minutes = 0;
+                            seconds = 03; //its supposed to be 5 minutes but its changed for testing purposes
+                            isBreak = true;
+                            pomodoroCount++;
+                            console.log("Starting short break...");
+                            showCatImages(); // Show the cat images
+                            breakSound.play(); // Play nyan sound
+                            hideJudgingCatImages(); // Hide the judging cat images
+                            document.body.classList.add('break-time'); // Add break-time class
+                        }
                     }
+                    updateTimerDisplay();
+                    // Automatically start the timer for the break or work session
+                    startTimer();
                 } else {
-                    seconds--;
+                    minutes--;
+                    seconds = 59;
                 }
-                updateTimerDisplay();
-            }
-        }, 1000);
-    }
-
-    // Click event for the play button
-    playButton.addEventListener("click", function () {
-        isPaused = false;
-        // Start the timer only if it's not already running
-        if (!timerInterval) {
-            if (!isBreak) {
-                showJudgingCats(); // Show judging cat images at the beginning of the session
             } else {
-                showCatImage(); // Show break cat image
+                seconds--;
             }
-            startTimer();
+            updateTimerDisplay();
         }
-    });
+    }, 1000);
+}
 
-    // Function to show judging cat images
-    function showJudgingCats() {
-        judgingCatImages.forEach(cat => {
-            cat.style.bottom = '300px';
-        });
-        // Move the gifs higher on the screen after a delay
-        setTimeout(function () {
-            judgingCatImages.forEach(cat => {
-                cat.style.bottom = '298px';
-            });
-        }, 500); // Adjust the delay as needed
+// Click event for the play button
+playButton.addEventListener("click", function () {
+    isPaused = false;
+    // Start the timer only if it's not already running
+    if (!timerInterval) {
+        startTimer();
     }
-
-    // Function to show break cat image
-    function showCatImage() {
-        const breakCatImage = new Image();
-        breakCatImage.src = "cat.gif";
-        breakCatImage.classList.add("break-cat");
-        document.body.appendChild(breakCatImage); // Append break cat image to the body
-    }
-
-    // Function to hide break cat image
-    function hideCatImage() {
-        const breakCatImage = document.querySelector(".break-cat");
-        if (breakCatImage) {
-            breakCatImage.remove(); // Remove break cat image from the body
-        }
-    }
-
-    // Show the initial timer
-    updateTimerDisplay();
 });
+
+// Click event for the pause button
+pauseButton.addEventListener("click", function () {
+    isPaused = true; // Pause the timer
+});
+
+// Click event for the restart button
+restartButton.addEventListener("click", function () {
+    clearInterval(timerInterval); // Clear any running intervals
+    minutes = 25; // Reset minutes to initial value
+    seconds = 0; // Reset seconds to initial value
+    isPaused = false; // Set isPaused to false
+    isBreak = false; // Reset isBreak to false
+    pomodoroCount = 0; // Reset pomodoroCount to 0
+    updateTimerDisplay(); // Update the timer display
+    document.body.classList.remove('break-time'); // Remove break-time class
+    hideJudgingCatImages(); // Hide the judging cat images
+});
+
+// Function to show cat images
+function showCatImages() {
+    catImages.forEach(cat => {
+        cat.style.bottom = '298px';
+    });
+}
+
+// Function to hide judging cat images
+function hideJudgingCatImages() {
+    console.log("Hiding judging cat images...");
+    judgingCatImages.forEach(cat => {
+        cat.style.display = 'none';
+    });
+}
+
+// Function to show judging cat images
+function showJudgingCatImages() {
+    console.log("Showing judging cat images...");
+    judgingCatImages.forEach(cat => {
+        cat.style.display = 'block';
+    });
+}
+
+// Show the initial timer
+updateTimerDisplay();
