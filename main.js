@@ -134,3 +134,4 @@ function showJudgingCatImages() {
 
 // Show the initial timer
 updateTimerDisplay();
+//commit
