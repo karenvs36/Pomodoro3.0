@@ -7,8 +7,8 @@ const breakSound = document.getElementById("breakSound");
 const judgingCatImages = document.querySelectorAll('.judging-cat');
 const catImages = document.querySelectorAll('.cat');
 
-let minutes = 0;
-let seconds = 2; // Adjusted for testing purposes
+let minutes = 25;
+let seconds = 0; // Adjusted for testing purposes
 let isPaused = false;
 let isBreak = false;
 let pomodoroCount = 0;
@@ -29,8 +29,8 @@ function startTimer() {
                     clearInterval(timerInterval);
                     if (isBreak) {
                         // Time for study after each break
-                        minutes = 0; // Change back to 25 minutes for study session
-                        seconds = 02;
+                        minutes = 25; // Change back to 25 minutes for study session
+                        seconds = 0;
                         isBreak = false;
                         console.log("Starting study session...");
                         document.body.classList.remove('break-time'); // Remove break-time class
@@ -41,12 +41,14 @@ function startTimer() {
                         document.getElementById('bellSound').play(); // Play bell sound for the end of the study session
                         if (pomodoroCount === 3) {
                             // Long break time after 4 pomodoros
-                            minutes = 1;
+                            
+                            minutes = 20;
                             seconds = 0;
                             isBreak = true;
                             pomodoroCount = 0;
-                            console.log("Starting long break...");
                             breakSound.play();
+                            console.log("Starting long break...");
+                            
                             showCatImages(); // Show the cat images
                             document.body.classList.add('break-time'); // Add break-time class
                             hideJudgingCatImages(); 
@@ -56,8 +58,7 @@ function startTimer() {
                             breakSound.pause();
                         } else {
                             // Short break time after each pomodoro
-                            minutes = 0;
-                            seconds = 03; //its supposed to be 5 minutes but its changed for testing purposes
+                            minutes = 5;
                             isBreak = true;
                             pomodoroCount++;
                             console.log("Starting short break...");
@@ -96,18 +97,6 @@ pauseButton.addEventListener("click", function () {
     isPaused = true; // Pause the timer
 });
 
-// Click event for the restart button
-restartButton.addEventListener("click", function () {
-    clearInterval(timerInterval); // Clear any running intervals
-    minutes = 25; // Reset minutes to initial value
-    seconds = 0; // Reset seconds to initial value
-    isPaused = false; // Set isPaused to false
-    isBreak = false; // Reset isBreak to false
-    pomodoroCount = 0; // Reset pomodoroCount to 0
-    updateTimerDisplay(); // Update the timer display
-    document.body.classList.remove('break-time'); // Remove break-time class
-    hideJudgingCatImages(); // Hide the judging cat images
-});
 
 // Function to show cat images
 function showCatImages() {
@@ -134,4 +123,4 @@ function showJudgingCatImages() {
 
 // Show the initial timer
 updateTimerDisplay();
-//commit
+//commit//comment
